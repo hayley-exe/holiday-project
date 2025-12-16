@@ -1,0 +1,76 @@
+body {
+  background: #121212;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+#three-container {
+  width: 400px;
+  height: 400px;
+  margin: auto;
+}
+
+canvas {
+  display: block;
+}
+
+.controls {
+  margin: 20px;
+}
+
+.game-area {
+  margin-top: 30px;
+}
+
+#dreidel {
+  width: 120px;
+  height: 120px;
+  background: gold;
+  margin: auto;
+  font-size: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  transition: transform 1s ease;
+}
+
+.spin {
+  transform: rotate(1080deg);
+}
+
+.result {
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+.gelt-area {
+  margin-top: 30px;
+}
+
+#geltContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.gelt {
+  width: 20px;
+  height: 20px;
+  background: gold;
+  border-radius: 50%;
+  margin: 3px;
+  animation: drop 0.5s ease;
+}
+
+@keyframes drop {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

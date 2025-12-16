@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dreidel Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>🕎 Dreidel Game</h1>
+
+    <div class="controls">
+        <button onclick="spinDreidel()">Spin Dreidel</button>
+    </div>
+
+    <div id="three-container"></div>
+
+    <div class="status">
+        <p>Pot: <span id="pot">0</span></p>
+        <p>You: <span id="player">0</span></p>
+        <p id="resultText"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158/build/three.min.js"></script>
+    <script src="gamble.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
