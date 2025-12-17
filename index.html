@@ -10,35 +10,33 @@
 <body>
     <h1>🕎 Dreidel Game</h1>
 
-    <!-- Player / Pot -->
     <div class="top-bar">
         <div>Player: <span id="player">10</span></div>
         <div>Pot: <span id="pot">10</span></div>
     </div>
 
     <div class="game-layout">
-        <!-- Color select -->
         <div class="sidebar">
             <h3>Dreidel Color</h3>
+
             <div class="color-panel">
                 <select id="modelSelect"></select>
-                <div id="colorPreview" class="color-preview" title="Current color"></div>
+                <div id="colorPreview" class="color-preview"></div>
             </div>
 
             <button id="spinBtn" class="btn">Spin</button>
-
             <div class="result" id="resultText">Ready to spin!</div>
         </div>
 
-        <!-- 3D play space -->
-        <div id="playSpace" aria-label="3D play area"></div>
+        <div id="playSpace"></div>
     </div>
 
-    <!-- THREE (non-module) -->
+    <!-- THREE -->
     <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
     <script src="https://unpkg.com/three@0.153.0/examples/js/loaders/OBJLoader.js"></script>
     <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
 
+    <!-- GAME -->
     <script src="gamble.js"></script>
     <script src="script.js"></script>
 </body>
