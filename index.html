@@ -2,42 +2,41 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Dreidel Game</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕎 Dreidel Spinning Game</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <h1>🕎 Dreidel Game</h1>
 
     <div class="top-bar">
-        <div>Player: <span id="player">10</span></div>
+        <div>Player Gelt: <span id="player">10</span></div>
         <div>Pot: <span id="pot">10</span></div>
     </div>
 
     <div class="game-layout">
         <div class="sidebar">
-            <h3>Dreidel Color</h3>
-
+            <h3>Choose Dreidel</h3>
             <div class="color-panel">
                 <select id="modelSelect"></select>
                 <div id="colorPreview" class="color-preview"></div>
             </div>
 
-            <button id="spinBtn" class="btn">Spin</button>
-            <div class="result" id="resultText">Ready to spin!</div>
+            <button id="spinBtn" class="btn">Spin the Dreidel!</button>
+            <div id="resultText" class="result">Ready to spin!</div>
         </div>
 
         <div id="playSpace"></div>
     </div>
 
-    <!-- THREE -->
+    <!-- Three.js Libraries -->
     <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
     <script src="https://unpkg.com/three@0.153.0/examples/js/loaders/OBJLoader.js"></script>
     <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
 
-    <!-- GAME -->
-    <script src="gamble.js"></script>
+    <!-- Your Game Script -->
     <script src="script.js"></script>
 </body>
 
