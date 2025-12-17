@@ -74,3 +74,54 @@ canvas {
     opacity: 1;
   }
 }
+
+/* Top controls */
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px;
+  margin: 10px auto;
+  padding: 0 20px;
+}
+
+.status div {
+  margin: 4px 0;
+}
+.settings button {
+  padding: 6px 10px;
+}
+
+/* Gelt coin display */
+#playerGelt .gelt,
+#potGelt .gelt {
+  width: 14px;
+  height: 14px;
+  margin: 2px;
+  display: inline-block;
+  background: gold;
+  border-radius: 50%;
+}
+
+/* Disabled spin button */
+#spinBtn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Smaller screens */
+@media (max-width: 480px) {
+  #three-container {
+    width: 320px;
+    height: 320px;
+  }
+}
+
+.rules {
+  max-width: 700px;
+  margin: 12px auto;
+  text-align: left;
+}
+.rules ul {
+  margin: 6px 0 0 18px;
+}

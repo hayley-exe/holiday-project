@@ -6,6 +6,10 @@ let player = 0;
 const potText = document.getElementById("pot");
 const playerText = document.getElementById("player");
 const resultText = document.getElementById("resultText");
+const spinBtn = document.getElementById("spinBtn");
+
+const potGelt = document.getElementById('potGelt');
+const playerGelt = document.getElementById('playerGelt');
 
 /* Load rules */
 fetch("gambling.json")
@@ -16,7 +20,10 @@ fetch("gambling.json")
         pot = data.startingGelt.pot;
         player = data.startingGelt.player;
         updateUI("Ready to spin!");
+        spinBtn.disabled = false;
     });
+
+
 
 function weightedSpin() {
     let r = Math.random();
@@ -72,4 +79,21 @@ function updateUI(msg) {
     potText.textContent = pot;
     playerText.textContent = player;
     resultText.textContent = msg;
+
+    // render simple gelt indicators (capped for performance)
+    function renderGelt(container, count) {
+        container.innerHTML = '';
+        if (count <= 20) {
+            for (let i = 0; i < count; i++) {
+                const d = document.createElement('span');
+                d.className = 'gelt';
+                container.appendChild(d);
+            }
+        } else {
+            container.textContent = count + ' gelt';
+        }
+    }
+
+    renderGelt(potGelt, pot);
+    renderGelt(playerGelt, player);
 }
