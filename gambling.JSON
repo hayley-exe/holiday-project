@@ -1,13 +1,9 @@
 {
-  "startingGelt": {
-    "player": 10,
-    "pot": 10
-  },
-  "spinDurationMs": 2500,
+  "startingGelt": { "player": 10, "pot": 10 },
   "symbols": [
-    { "letter": "נ", "name": "Nun", "action": "nothing", "probability": 0.25 },
-    { "letter": "ג", "name": "Gimmel", "action": "all", "probability": 0.25 },
-    { "letter": "ה", "name": "Hey", "action": "half", "probability": 0.25 },
-    { "letter": "ש", "name": "Shin", "action": "put", "probability": 0.25 }
+    { "name": "Nun", "effect": "nothing" },
+    { "name": "Gimmel", "effect": "all" },
+    { "name": "Hey", "effect": "half" },
+    { "name": "Shin", "effect": "put" }
   ]
 }

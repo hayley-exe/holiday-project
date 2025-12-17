@@ -1,269 +1,211 @@
-import * as THREE from 'https://unpkg.com/three@0.153.0/build/three.module.js';
-import { OrbitControls } from 'https://unpkg.com/three@0.153.0/examples/jsm/controls/OrbitControls.js';
-import { OBJLoader } from 'https://unpkg.com/three@0.153.0/examples/jsm/loaders/OBJLoader.js';
+let scene, camera, renderer, controls;
+let dreidel = null, spinning = false, angularSpeed = 0, spinAxis = new THREE.Vector3();
+let spinResolveTimeout = null;
 
-// Model list (filename -> display name + color swatch)
 const MODELS = [
-    { name: 'Red', file: 'red-tinker.obj' },
-    { name: 'Orange', file: 'orange-tinker.obj' },
-    { name: 'Yellow', file: 'yellow-tinker.obj' },
-    { name: 'Green', file: 'green-tinker.obj' },
-    { name: 'Light Blue', file: 'lightblue-tinker.obj' },
-    { name: 'Blue', file: 'blue-tinker.obj' },
-    { name: 'Purple', file: 'purple-tinker.obj' },
-    { name: 'Pink', file: 'pink-tinker.obj' }
+    { name: "Red", file: "models/red-tinker.obj", color: 0xd32f2f },
+    { name: "Orange", file: "models/orange-tinker.obj", color: 0xff9800 },
+    { name: "Yellow", file: "models/yellow-tinker.obj", color: 0xffeb3b },
+    { name: "Green", file: "models/green-tinker.obj", color: 0x4caf50 },
+    { name: "Blue", file: "models/blue-tinker.obj", color: 0x2196f3 }
 ];
 
-// UI elements
-const canvas = document.getElementById('dreidel-canvas');
-const spinBtn = document.getElementById('spinBtn');
-const resultText = document.getElementById('resultText');
-const potEl = document.getElementById('pot');
-const playerEl = document.getElementById('player');
-const potGelt = document.getElementById('potGelt');
-const playerGelt = document.getElementById('playerGelt');
-const modelSelect = document.getElementById('model-select');
-const colorSwatch = document.getElementById('color-swatch');
+const playSpace = document.getElementById("playSpace");
+const modelSelect = document.getElementById("modelSelect");
+const spinBtn = document.getElementById("spinBtn");
+const colorPreview = document.getElementById("colorPreview");
 
-let scene, camera, renderer, controls, loader;
-let currentModel = null;
-let spinning = false;
-let angularSpeed = 0; // rad/sec
-let lastTime = 0;
+MODELS.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.file;
+    opt.textContent = m.name;
+    modelSelect.appendChild(opt);
+});
 
-// Game state
-let pot = 10;
-let player = 10;
+modelSelect.addEventListener('change', () => {
+    const sel = MODELS.find(x => x.file === modelSelect.value);
+    if (sel) loadModel(sel.file, sel.color);
+});
 
-function updateGeltUI() {
-    potEl.textContent = pot;
-    playerEl.textContent = player;
-    potGelt.textContent = pot;
-    playerGelt.textContent = player;
-}
+spinBtn.addEventListener('click', () => {
+    if (!dreidel || spinning) return;
+    startSpin();
+});
 
-function populateModelSelect() {
-    MODELS.forEach((m, i) => {
-        const opt = document.createElement('option');
-        opt.value = m.file;
-        opt.textContent = m.name;
-        modelSelect.appendChild(opt);
-    });
-    // set swatch for first
-    setSwatchColor(MODELS[0].color);
-}
+window.addEventListener('resize', () => {
+    if (!renderer || !camera) return;
+    camera.aspect = playSpace.clientWidth / playSpace.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(playSpace.clientWidth, playSpace.clientHeight);
+});
 
-function setSwatchColor(hex) {
-    if (!colorSwatch) return;
-    colorSwatch.style.background = hex;
-}
+initThree();
+loadModel(MODELS[0].file, MODELS[0].color);
+animate();
 
 function initThree() {
     scene = new THREE.Scene();
-    const container = document.getElementById('thing-container');
+    scene.background = new THREE.Color(0x222222);
 
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    resizeRenderer();
+    camera = new THREE.PerspectiveCamera(45, playSpace.clientWidth / playSpace.clientHeight, 0.1, 100);
+    camera.position.set(0, 2, 5);
 
-    camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
-    camera.position.set(0, 1.5, 3);
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.7);
+    scene.add(hemi);
 
-    controls = new OrbitControls(camera, renderer.domElement);
-    controls.enablePan = false;
-    controls.enableZoom = true;
-    controls.target.set(0, 0.5, 0);
-
-    const ambient = new THREE.AmbientLight(0xffffff, 0.75);
-    scene.add(ambient);
-
-    const dir = new THREE.DirectionalLight(0xffffff, 0.6);
-    dir.position.set(5, 10, 7.5);
+    const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+    dir.position.set(3, 10, 10);
     scene.add(dir);
+
+    const ambient = new THREE.AmbientLight(0x404040, 0.4);
+    scene.add(ambient);
 
     // ground
     const ground = new THREE.Mesh(
-        new THREE.PlaneGeometry(10, 10),
-        new THREE.MeshStandardMaterial({ color: '#f5f5f5' })
+        new THREE.PlaneGeometry(20, 20),
+        new THREE.MeshStandardMaterial({ color: 0x1d1d1d, roughness: 1 })
     );
     ground.rotation.x = -Math.PI / 2;
-    ground.position.y = 0;
+    ground.position.y = -0.05;
+    ground.receiveShadow = true;
     scene.add(ground);
 
-    loader = new OBJLoader();
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(playSpace.clientWidth, playSpace.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    playSpace.innerHTML = "";
+    playSpace.appendChild(renderer.domElement);
 
-    window.addEventListener('resize', resizeRenderer);
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enablePan = false;
 }
 
-function resizeRenderer() {
-    const w = canvas.clientWidth || 640;
-    const h = parseInt(canvas.style.height) || 480;
-    renderer.setSize(w, h, false);
-    if (camera) camera.aspect = w / h;
-    if (camera) camera.updateProjectionMatrix();
-}
+function loadModel(path, color = 0xffffff) {
+    const loader = new THREE.OBJLoader();
 
-function setModelColor(obj, hex) {
-    obj.traverse(child => {
-        if (child.isMesh) {
-            if (child.material) {
-                // replace or set color
-                try {
-                    child.material = new THREE.MeshStandardMaterial({ color: new THREE.Color(hex), flatShading: false });
-                } catch (e) {
-                    // ignore
-                }
-            } else {
-                child.material = new THREE.MeshStandardMaterial({ color: new THREE.Color(hex) });
-            }
-            child.castShadow = true;
-            child.receiveShadow = true;
-        }
-    });
-}
-
-function loadModel(file, colorHex) {
-    return new Promise((resolve, reject) => {
-        loader.load(file, obj => {
-            // center & scale
-            const box = new THREE.Box3().setFromObject(obj);
-            const size = new THREE.Vector3();
-            box.getSize(size);
-            const maxDim = Math.max(size.x, size.y, size.z);
-            const scale = (1.2 / maxDim) || 1;
-            obj.scale.setScalar(scale);
-
-            // recenter
-            box.setFromObject(obj);
-            const center = new THREE.Vector3();
-            box.getCenter(center);
-            obj.position.sub(center);
-            obj.position.y += 0.5; // lift a bit
-
-            setModelColor(obj, colorHex);
-
-            resolve(obj);
-        }, undefined, err => reject(err));
-    });
-}
-
-async function switchModel(file, colorHex) {
-    if (currentModel) scene.remove(currentModel);
-    try {
-        const obj = await loadModel(file, colorHex);
-        currentModel = obj;
-        scene.add(currentModel);
-    } catch (e) {
-        console.error('Failed to load model', e);
-        resultText.textContent = 'Failed to load model: see console';
+    // remove existing
+    if (dreidel) {
+        scene.remove(dreidel);
+        dreidel.traverse(c => { if (c.geometry) c.geometry.dispose(); });
+        dreidel = null;
     }
-}
 
-function randRange(a, b) { return a + Math.random() * (b - a); }
+    loader.load(path, obj => {
+        // unify material
+        const mat = new THREE.MeshStandardMaterial({ color: color, metalness: 0.2, roughness: 0.6 });
 
-function spinOutcome() {
-    const outcomes = ['Nun', 'Gimmel', 'Hey', 'Shin'];
-    return outcomes[Math.floor(Math.random() * outcomes.length)];
-}
-
-function applyOutcome(outcome) {
-    switch (outcome) {
-        case 'Nun':
-            resultText.textContent = 'Nun — nothing happens.';
-            break;
-        case 'Gimmel':
-            resultText.textContent = 'Gimmel — you take the whole pot!';
-            player += pot;
-            pot = 0;
-            break;
-        case 'Hey': {
-            const take = Math.floor(pot / 2);
-            resultText.textContent = `Hey — take half the pot (${take}).`;
-            player += take;
-            pot -= take;
-            break;
-        }
-        case 'Shin':
-            resultText.textContent = 'Shin — put one gelt into the pot.';
-            if (player > 0) {
-                player -= 1;
-                pot += 1;
-            } else {
-                resultText.textContent += ' (no gelt to contribute)';
+        obj.traverse(child => {
+            if (child.isMesh) {
+                child.material = mat;
+                child.castShadow = true;
+                child.receiveShadow = true;
             }
-            break;
-    }
-    updateGeltUI();
+        });
+
+        // center & scale
+        const box = new THREE.Box3().setFromObject(obj);
+        const size = box.getSize(new THREE.Vector3()).length();
+        const scale = 1.2 / size;
+        obj.scale.setScalar(scale);
+
+        // reset rotation & position
+        obj.position.set(0, 0.2, 0);
+        obj.rotation.set(0, 0, 0);
+
+        dreidel = obj;
+        scene.add(dreidel);
+
+        // update preview color
+        colorPreview.style.background = '#' + color.toString(16).padStart(6, '0');
+    }, xhr => {
+        // progress
+    }, err => {
+        console.error('OBJ load err', err);
+    });
 }
 
 function startSpin() {
-    if (spinning) return;
     spinning = true;
-    spinBtn.disabled = true;
-    resultText.textContent = 'Spinning...';
+    // random angular speed and axis (mostly around Y but with tilt)
+    angularSpeed = THREE.MathUtils.randFloat(8, 12); // radians/sec
+    const tilt = new THREE.Vector3(THREE.MathUtils.randFloat(-0.4, 0.4), THREE.MathUtils.randFloat(0.8, 1), THREE.MathUtils.randFloat(-0.4, 0.4)).normalize();
+    spinAxis.copy(tilt);
 
-    // set a random angular velocity and tilt
-    angularSpeed = randRange(18, 36) * (Math.PI / 180); // rad/sec
-    // Add a random spin boost
-    angularSpeed *= randRange(6, 12);
+    // add a small random pre-tilt
+    dreidel.rotateX(THREE.MathUtils.randFloat(-0.4, 0.4));
+    dreidel.rotateZ(THREE.MathUtils.randFloat(-0.4, 0.4));
 }
 
-function stopSpinWithOutcome() {
-    const outcome = spinOutcome();
-    applyOutcome(outcome);
+function getTopFace() {
+    if (!dreidel) return null;
+    // Local normals for the four sides. If your model was exported with a different
+    // orientation, change these vectors to match which local axis points out of
+    // each labeled face. For example, if the model's 'Nun' side points to +Z
+    // change the first vector to (0,0,1). The current mapping is:
+    //  [ +X => Nun, -X => Gimmel, +Z => Hey, -Z => Shin ]
+    const localNormals = [
+        new THREE.Vector3(1, 0, 0), // Nun
+        new THREE.Vector3(-1, 0, 0), // Gimmel
+        new THREE.Vector3(0, 0, 1), // Hey
+        new THREE.Vector3(0, 0, -1) // Shin
+    ];
+    const names = ['Nun', 'Gimmel', 'Hey', 'Shin'];
+    const worldUp = new THREE.Vector3(0, 1, 0);
+
+    const q = new THREE.Quaternion();
+    dreidel.getWorldQuaternion(q);
+
+    let best = { idx: -1, dot: -Infinity };
+    localNormals.forEach((n, i) => {
+        const wn = n.clone().applyQuaternion(q).normalize();
+        const dot = wn.dot(worldUp);
+        if (dot > best.dot) best = { idx: i, dot };
+    });
+
+    if (best.idx >= 0) return { face: names[best.idx], index: best.idx };
+    return null;
+}
+
+function finalizeSpin() {
     spinning = false;
-    spinBtn.disabled = false;
+    angularSpeed = 0;
+
+    const top = getTopFace();
+    if (!top) {
+        document.getElementById('resultText').textContent = 'Could not determine result.';
+        return;
+    }
+
+    const outcome = top.face; // 'Nun' | 'Gimmel' | 'Hey' | 'Shin'
+    // call gamble resolver
+    if (typeof resolveSpin === 'function') resolveSpin(outcome);
 }
 
-function animate(time) {
+let last = performance.now();
+function animate() {
     requestAnimationFrame(animate);
-    if (!lastTime) lastTime = time;
-    const dt = (time - lastTime) / 1000;
-    lastTime = time;
+    const now = performance.now();
+    const delta = (now - last) / 1000;
+    last = now;
 
-    if (currentModel) {
-        if (spinning) {
-            // apply rotation around Y and a little wobble
-            currentModel.rotation.y += angularSpeed * dt;
-            currentModel.rotation.x = Math.sin(time / 200) * 0.15;
+    if (dreidel && spinning) {
+        // rotate around world axis
+        const step = angularSpeed * delta;
+        dreidel.rotateOnWorldAxis(spinAxis, step);
+        // apply damping
+        angularSpeed *= Math.max(0.95, 1 - 1.5 * delta);
 
-            // decay
-            angularSpeed *= Math.pow(0.98, dt * 60);
-
-            if (angularSpeed < 0.01) {
-                // finalize
-                stopSpinWithOutcome();
+        if (angularSpeed < 0.1) {
+            // gently settle: align to nearest face by progressively reducing jitter
+            // small timeout ensures we run final detection after motion settles
+            if (spinResolveTimeout === null) {
+                spinResolveTimeout = setTimeout(() => {
+                    finalizeSpin();
+                    spinResolveTimeout = null;
+                }, 300);
             }
-        } else {
-            // subtle idle rotation
-            currentModel.rotation.y += 0.002;
         }
     }
 
-    controls.update();
     renderer.render(scene, camera);
 }
-
-// initialization
-populateModelSelect();
-initThree();
-// load first model
-switchModel(MODELS[0].file, MODELS[0].color);
-updateGeltUI();
-
-// events
-modelSelect.addEventListener('change', (e) => {
-    const file = e.target.value;
-    const entry = MODELS.find(m => m.file === file) || MODELS[0];
-    setSwatchColor(entry.color);
-    switchModel(entry.file, entry.color);
-});
-
-spinBtn.addEventListener('click', () => startSpin());
-
-// keyboard: space to spin
-window.addEventListener('keydown', (e) => { if (e.code === 'Space') startSpin(); });
-
-// begin animation
-requestAnimationFrame(animate);
-

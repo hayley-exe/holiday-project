@@ -2,68 +2,45 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Dreidel Game</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-
     <h1>🕎 Dreidel Game</h1>
 
-
-
-    <div class="top-controls">
-        <div class="status">
-            <div>Pot: <span id="pot">0</span></div>
-            <div>Player: <span id="player">0</span></div>
-        </div>
-
+    <!-- Player / Pot -->
+    <div class="top-bar">
+        <div>Player: <span id="player">10</span></div>
+        <div>Pot: <span id="pot">10</span></div>
     </div>
 
-    <div class="game-area">
-        <div id="thing-container">
-            <canvas id="dreidel-canvas" style="width:100%; height:480px; display:block"></canvas>
+    <div class="game-layout">
+        <!-- Color select -->
+        <div class="sidebar">
+            <h3>Dreidel Color</h3>
+            <div class="color-panel">
+                <select id="modelSelect"></select>
+                <div id="colorPreview" class="color-preview" title="Current color"></div>
+            </div>
+
+            <button id="spinBtn" class="btn">Spin</button>
+
+            <div class="result" id="resultText">Ready to spin!</div>
         </div>
 
-        <div class="controls">
-            <button id="spinBtn" class="btn">Spin Dreidel</button>
+        <!-- 3D play space -->
+        <div id="playSpace" aria-label="3D play area"></div>
+    </div>
 
-            <div class="result">
-                <div id="resultText">Ready to spin!</div>
-            </div>
+    <!-- THREE (non-module) -->
+    <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.153.0/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
 
-            <div class="gelt-area">
-                <h3>Gelt</h3>
-                <div id="geltContainer">
-                    <div class="pot-gelt">Pot: <span id="potGelt"></span></div>
-                    <div class="player-gelt">Player: <span id="playerGelt"></span></div>
-                </div>
-            </div>
-
-            <div id="customize-panel" class="customize">
-                <h4>Customize</h4>
-
-                <div class="field">
-                    <label>Model</label>
-                    <select id="model-select"></select>
-                    <div id="color-swatch" class="color-swatch" title="Model color swatch"></div>
-                </div>
-            </div>
-
-            <div class="rules">
-                <h4>Rules</h4>
-                <ul>
-                    <li><strong>Nun (נ)</strong> — nothing happens.</li>
-                    <li><strong>Gimmel (ג)</strong> — take all the pot.</li>
-                    <li><strong>Hey (ה)</strong> — take half the pot.</li>
-                    <li><strong>Shin (ש)</strong> — put one gelt into the pot.</li>
-                </ul>
-            </div>
-        </div>
-
-
-        <script src="script.js"></script>
+    <script src="gamble.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
