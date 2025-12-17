@@ -12,6 +12,8 @@ window.addEventListener("DOMContentLoaded", () => {
         { name: "Yellow", file: "models/yellow-tinker.obj", color: 0xffeb3b },
         { name: "Green", file: "models/green-tinker.obj", color: 0x4caf50 },
         { name: "Blue", file: "models/blue-tinker.obj", color: 0x2196f3 }
+        { name: "Purple", file: "models/purple-tinker.obj", color: 0x9c27b0 },
+        { name: "Pink", file: "models/pink-tinker.obj", color: 0xe91e63 }
     ];
 
     const playSpace = document.getElementById("playSpace");
