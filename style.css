@@ -1,127 +1,102 @@
 body {
-  background: #121212;
-  color: white;
-  font-family: Arial, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial;
+  margin: 16px;
+  color: #222;
+}
+
+h1 {
   text-align: center;
-}
-#three-container {
-  width: 400px;
-  height: 400px;
-  margin: auto;
-}
-
-canvas {
-  display: block;
-}
-
-.controls {
-  margin: 20px;
+  margin-bottom: 8px;
 }
 
 .game-area {
-  margin-top: 30px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  align-items: start;
 }
 
-#dreidel {
-  width: 120px;
-  height: 120px;
-  background: gold;
-  margin: auto;
-  font-size: 64px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 12px;
-  transition: transform 1s ease;
+#thing-container {
+  background: linear-gradient(#fff, #f0f6ff);
+  border-radius: 8px;
+  padding: 8px;
+}
+#dreidel-canvas {
+  width: 100%;
+  height: 480px;
+  display: block;
+  border-radius: 6px;
 }
 
-.spin {
-  transform: rotate(1080deg);
+.controls {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
-
-.result {
-  margin-top: 15px;
-  font-size: 18px;
-}
-
-.gelt-area {
-  margin-top: 30px;
-}
-
-#geltContainer {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.gelt {
-  width: 20px;
-  height: 20px;
-  background: gold;
-  border-radius: 50%;
-  margin: 3px;
-  animation: drop 0.5s ease;
-}
-
-@keyframes drop {
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Top controls */
-.top-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 800px;
-  margin: 10px auto;
-  padding: 0 20px;
-}
-
-.status div {
-  margin: 4px 0;
-}
-.settings button {
-  padding: 6px 10px;
-}
-
-/* Gelt coin display */
-#playerGelt .gelt,
-#potGelt .gelt {
-  width: 14px;
-  height: 14px;
-  margin: 2px;
+.btn {
   display: inline-block;
-  background: gold;
-  border-radius: 50%;
+  padding: 10px 14px;
+  background: #2b7de9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
-
-/* Disabled spin button */
-#spinBtn[disabled] {
+.btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Smaller screens */
-@media (max-width: 480px) {
-  #three-container {
-    width: 320px;
-    height: 320px;
-  }
+.result {
+  margin-top: 12px;
+  padding: 8px;
+  border-radius: 6px;
+  background: #f7fbff;
 }
 
-.rules {
-  max-width: 700px;
-  margin: 12px auto;
-  text-align: left;
+.customize {
+  margin-top: 12px;
 }
-.rules ul {
-  margin: 6px 0 0 18px;
+.customize .field {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.customize select {
+  padding: 6px 8px;
+}
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.gelt-area {
+  margin-top: 12px;
+}
+.rules {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.status {
+  display: flex;
+  gap: 12px;
+  font-weight: 600;
+}
+
+@media (max-width: 880px) {
+  .game-area {
+    grid-template-columns: 1fr;
+  }
 }
