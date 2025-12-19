@@ -4,32 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🕎 Dreidel Spinning Game</title>
+    <title>🕎 Colorful Dreidel Spinner 🕎</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 </head>
 
 <body>
-    <h1>🕎 Dreidel Game</h1>
-    <div class="top-bar">
-        <div>Player Gelt: <span id="player">0</span></div>
-        <div>Pot: <span id="pot">0</span></div>
-    </div>
-    <div class="game-layout">
-        <div class="sidebar">
-            <h3>Choose Dreidel</h3>
-            <div class="color-panel">
-                <select id="modelSelect"></select>
-                <div id="colorPreview" class="color-preview"></div>
-            </div>
-            <button id="spinBtn" class="btn">Spin the Dreidel!</button>
-            <div id="resultText" class="result">Loading…</div>
+    <div id="app">
+        <h1>🕎 Dreidel Spinner 🕎</h1>
+        <div id="controls">
+            <select v-model="selectedModelId">
+                <option disabled value="">Choose a Dreidel...</option>
+                <option v-for="model in models" :value="model.id">{{ model.name }}</option>
+            </select>
+            <button @click="spin" :disabled="!selectedModelId">Spin!</button>
+            <div>Players: <input type="number" v-model.number="playerCount" min="1" max="4"></div>
         </div>
-        <div id="playSpace"></div>
+
+        <div id="canvas-container"></div>
+
+        <div class="result">{{ resultText }}</div>
+
+        <div class="gelt-display">
+            <div class="pot">Pot: <span v-for="n in pot" class="coin"></span> ({{ pot }})</div>
+            <div v-for="(player, i) in players" :key="i" class="player">
+                Player {{ i+1 }} {{ i === currentPlayer ? '(Turn)' : '' }}:
+                <span v-for="n in player.gelt" class="coin"></span> ({{ player.gelt }})
+            </div>
+        </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-    <script src="gamble.js"></script>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>

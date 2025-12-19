@@ -1,0 +1,55 @@
+[
+  {
+    "id": "primitive",
+    "name": "Classic Blue Dreidel (Built-in)",
+    "type": "primitive"
+  },
+  {
+    "id": "red",
+    "name": "🔴 Red Tinker Dreidel",
+    "type": "obj",
+    "url": "models/red-tinker.obj"
+  },
+  {
+    "id": "orange",
+    "name": "🟠 Orange Tinker Dreidel",
+    "type": "obj",
+    "url": "models/oranger-tinker.obj"
+  },
+  {
+    "id": "yellow",
+    "name": "🟡 Yellow Tinker Dreidel",
+    "type": "obj",
+    "url": "models/yellow-tinker.obj"
+  },
+  {
+    "id": "green",
+    "name": "🟢 Green Tinker Dreidel",
+    "type": "obj",
+    "url": "models/green-tinker.obj"
+  },
+  {
+    "id": "lightblue",
+    "name": "🟩 Light Blue Tinker Dreidel",
+    "type": "obj",
+    "url": "models/lightblue-tinker.obj"
+  },
+  {
+    "id": "blue",
+    "name": "🔵 Blue Tinker Dreidel",
+    "type": "obj",
+    "url": "models/blue-tinker.obj"
+  },
+  {
+    "id": "purple",
+    "name": "🟣 Purple Tinker Dreidel",
+    "type": "obj",
+    "url": "models/purple-tinker.obj"
+  },
+  {
+    "id": "pink",
+    "name": "🌸 Pink Tinker Dreidel",
+    "type": "obj",
+    "url": "models/pink-tinker.obj"
+  }
+]
