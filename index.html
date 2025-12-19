@@ -10,12 +10,10 @@
 
 <body>
     <h1>🕎 Dreidel Game</h1>
-
     <div class="top-bar">
         <div>Player Gelt: <span id="player">0</span></div>
         <div>Pot: <span id="pot">0</span></div>
     </div>
-
     <div class="game-layout">
         <div class="sidebar">
             <h3>Choose Dreidel</h3>
@@ -23,21 +21,14 @@
                 <select id="modelSelect"></select>
                 <div id="colorPreview" class="color-preview"></div>
             </div>
-
             <button id="spinBtn" class="btn">Spin the Dreidel!</button>
-            <div id="resultText" class="result">Loading game…</div>
+            <div id="resultText" class="result">Loading…</div>
         </div>
-
         <div id="playSpace"></div>
     </div>
 
-    <!-- p5.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-
-    <!-- IMPORTANT: gamble.js FIRST -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
     <script src="gamble.js"></script>
-
-    <!-- Spinner / 3D logic -->
     <script src="script.js"></script>
 </body>
 

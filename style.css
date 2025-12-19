@@ -79,7 +79,6 @@ h1 {
 .btn:hover {
   background: #1565c0;
 }
-
 .btn:disabled {
   background: #999;
   cursor: not-allowed;
@@ -100,31 +99,26 @@ h1 {
   overflow: hidden;
 }
 
-/* Make sure p5 canvas fills the play area */
 #playSpace canvas {
   display: block;
   width: 100% !important;
   height: 100% !important;
 }
 
-/* 📱 Mobile layout */
 @media (max-width: 900px) {
   .game-layout {
     grid-template-columns: 1fr;
   }
-
   .sidebar {
     border-right: none;
     border-bottom: 1px solid #ccc;
   }
-
   .top-bar {
     gap: 40px;
     font-size: 1.2em;
   }
 }
 
-/* 🪙 Chip animation */
 @keyframes chip-fly {
   0% {
     transform: translateY(0) scale(1);
@@ -136,20 +130,6 @@ h1 {
   }
 }
 
-.chip {
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: gold;
-  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.3);
-  animation: chip-fly 0.6s ease-out forwards;
-  pointer-events: none;
-}
-
-/* ... your existing CSS unchanged ... */
-
-/* Ensure chips appear above everything */
 .chip {
   position: absolute;
   width: 22px;
