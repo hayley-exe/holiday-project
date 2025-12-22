@@ -1,4 +1,4 @@
-const { createApp, ref, watch, onMounted } = Vue;
+const { createApp, ref, watch, onMounted, computed } = Vue;
 
 createApp({
     setup() {
@@ -311,6 +311,20 @@ createApp({
             }
         });
 
+        // Computed guard for whether the Spin button should be enabled.
+        const canSpin = computed(() => {
+            if (playerCount.value === 1) {
+                // require a visible (non-hidden) model selection
+                const sel = selectedModelId.value;
+                const model = models.value.find(m => m.id === sel);
+                return !!sel && model && !model.hidden;
+            } else {
+                // multiplayer: require current player to have chosen a model
+                const player = players.value[currentPlayer.value];
+                return !!(player && player.modelId);
+            }
+        });
+
         const lockColor = (i) => {
             const player = players.value[i];
             if (player && player.modelId) player.locked = true;
@@ -326,7 +340,8 @@ createApp({
             currentPlayer,
             spinning,
             spin,
-            lockColor
+            lockColor,
+            canSpin
         };
     }
 }).mount('#app');

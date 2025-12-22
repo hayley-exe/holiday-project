@@ -30,7 +30,7 @@
                 <span class="swatch" v-if="selectedModelId"
                     :style="{background: (models.find(m =&gt; m.id === selectedModelId) || {}).color || '#ccc'}"></span>
             </div>
-            <button @click="spin" :disabled="!selectedModelId">Spin!</button>
+            <button @click="spin" :disabled="!canSpin">Spin!</button>
             <div>Players: <input type="number" v-model.number="playerCount" min="1" max="4"></div>
         </div>
 
