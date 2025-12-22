@@ -4,8 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🕎 Colorful Dreidel Spinner 🕎</title>
+    <title>Colorful Dreidel Spinner</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Emoji favicon: 🫟 -->
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='100%25' height='100%25' fill='transparent'/%3E%3Ctext x='50%25' y='50%25' font-size='44' dominant-baseline='middle' text-anchor='middle'%3E🫟%3C/text%3E%3C/svg%3E">
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 </head>
@@ -14,13 +17,25 @@
     <div id="app">
         <h1>🕎 Dreidel Spinner 🕎</h1>
         <div id="controls">
-            <select v-model="selectedModelId">
-                <option disabled value="">Choose a Dreidel...</option>
-                <option v-for="model in models" :value="model.id">{{ model.name }}</option>
-            </select>
+            <div v-if="playerCount === 1" class="top-color">
+                <select v-model="selectedModelId">
+                    <!-- If the selected model is hidden (default), show the emoji placeholder as the displayed value -->
+                    <option v-if="models.find(m =&gt; m.id === selectedModelId && m.hidden)" :value="selectedModelId"
+                        disabled>🌈Choose Color🌈</option>
+                    <!-- Also show placeholder when nothing is selected -->
+                    <option v-if="!selectedModelId" disabled value="">🌈Choose Color🌈</option>
+                    <option v-for="model in models.filter(m =&gt; !m.hidden)" :value="model.id">{{ model.name }}
+                    </option>
+                </select>
+                <span class="swatch" v-if="selectedModelId"
+                    :style="{background: (models.find(m =&gt; m.id === selectedModelId) || {}).color || '#ccc'}"></span>
+            </div>
             <button @click="spin" :disabled="!selectedModelId">Spin!</button>
             <div>Players: <input type="number" v-model.number="playerCount" min="1" max="4"></div>
         </div>
+
+        <!-- Visual spacer between controls (spin) and the play area -->
+        <div class="spacer" aria-hidden="true"></div>
 
         <div id="canvas-container"></div>
 
@@ -31,11 +46,22 @@
             <div v-for="(player, i) in players" :key="i" class="player">
                 Player {{ i+1 }} {{ i === currentPlayer ? '(Turn)' : '' }}:
                 <span v-for="n in player.gelt" class="coin"></span> ({{ player.gelt }})
+                <div class="player-controls">
+                    <select v-if="playerCount > 1" v-model="player.modelId" @change="lockColor(i)"
+                        :disabled="player.locked">
+                        <option disabled value="">🌈Choose Color🌈</option>
+                        <option v-for="model in models.filter(m =&gt; !m.hidden)" :value="model.id">{{ model.name }}
+                        </option>
+                    </select>
+                    <span class="swatch"
+                        :style="{background: (models.find(m =&gt; m.id === (player.modelId || (playerCount === 1 ? selectedModelId : null))) || {}).color || '#ccc'}"></span>
+                    <span v-if="player.locked">🔒</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="apps.js"></script>
 </body>
 
 </html>

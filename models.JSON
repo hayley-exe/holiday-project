@@ -1,55 +1,66 @@
 [
   {
-    "id": "primitive",
-    "name": "Classic Blue Dreidel (Built-in)",
-    "type": "primitive"
+    "id": "dark",
+    "name": "Dark Dreidel",
+    "type": "obj",
+    "url": "models/dark-tinker.obj",
+    "color": "#222222",
+    "hidden": true
   },
   {
     "id": "red",
-    "name": "🔴 Red Tinker Dreidel",
+    "name": "❤️ Red Dreidel",
     "type": "obj",
-    "url": "models/red-tinker.obj"
+    "url": "models/red-tinker.obj",
+    "color": "#ff4d4d"
   },
   {
     "id": "orange",
-    "name": "🟠 Orange Tinker Dreidel",
+    "name": "🧡 Orange Dreidel",
     "type": "obj",
-    "url": "models/oranger-tinker.obj"
+    "url": "models/orange-tinker.obj",
+    "color": "#ff8c00"
   },
   {
     "id": "yellow",
-    "name": "🟡 Yellow Tinker Dreidel",
+    "name": "💛 Yellow Dreidel",
     "type": "obj",
-    "url": "models/yellow-tinker.obj"
+    "url": "models/yellow-tinker.obj",
+    "color": "#ffd700"
   },
   {
     "id": "green",
-    "name": "🟢 Green Tinker Dreidel",
+    "name": "💚 Green Dreidel",
     "type": "obj",
-    "url": "models/green-tinker.obj"
+    "url": "models/green-tinker.obj",
+    "color": "#3cb371"
   },
   {
     "id": "lightblue",
-    "name": "🟩 Light Blue Tinker Dreidel",
+    "name": "🩵 Light Blue Dreidel",
     "type": "obj",
-    "url": "models/lightblue-tinker.obj"
+    "url": "models/lightblue-tinker.obj",
+    "color": "#4da6ff"
   },
   {
     "id": "blue",
-    "name": "🔵 Blue Tinker Dreidel",
+    "name": "💙 Blue Dreidel",
     "type": "obj",
-    "url": "models/blue-tinker.obj"
+    "url": "models/blue-tinker.obj",
+    "color": "#1e90ff"
   },
   {
     "id": "purple",
-    "name": "🟣 Purple Tinker Dreidel",
+    "name": "💜 Purple Dreidel",
     "type": "obj",
-    "url": "models/purple-tinker.obj"
+    "url": "models/purple-tinker.obj",
+    "color": "#9b59b6"
   },
   {
     "id": "pink",
-    "name": "🌸 Pink Tinker Dreidel",
+    "name": "🩷 Pink Dreidel",
     "type": "obj",
-    "url": "models/pink-tinker.obj"
+    "url": "models/pink-tinker.obj",
+    "color": "#ff7fbf"
   }
 ]

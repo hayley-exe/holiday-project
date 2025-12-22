@@ -1,7 +1,18 @@
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(#001133, #000811);
+  /* Background (image + gradient fallback). Replace the image path if needed */
+  background-image: url("imgs/z12.jpg"), linear-gradient(#001133, #000811);
+  background-size: cover, cover; /* ensure image fills viewport */
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed; /* keeps background fixed while scrolling */
+  background-position: center center;
+  background-color: #000811; /* fallback color */
   color: white;
   min-height: 100vh;
 }
@@ -18,7 +29,7 @@ h1 {
 
 #controls {
   padding: 20px;
-  background: #002255;
+  background-color: rgb(36, 36, 136);
   border-radius: 12px;
   display: inline-block;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
@@ -35,11 +46,12 @@ input {
 }
 
 button {
-  background: #ffcc00;
+  background-color: darkorchid;
   color: #000;
   font-weight: bold;
   cursor: pointer;
   min-width: 120px;
+  transition: background 0.15s ease, filter 0.15s ease;
 }
 
 button:disabled {
@@ -89,4 +101,58 @@ button:disabled {
 }
 .player {
   margin: 10px 0;
+}
+
+.player-controls {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-color {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 8px;
+}
+
+.swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Spacer between control area and play/canvas area */
+.spacer {
+  height: 28px; /* adjust as needed */
+  width: 100%;
+}
+
+/* Override / enhancements for button glow and clicked state (placed here to override earlier rules if necessary) */
+button {
+  transition: background 0.15s ease, filter 0.15s ease, box-shadow 0.18s ease,
+    transform 0.06s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Show mediumpurple only while hovered and button has been clicked */
+button.clicked:hover {
+  background: mediumpurple !important;
+  color: #fff !important;
+  box-shadow: 0 8px 28px rgba(147, 112, 219, 0.36) !important;
+  border-color: rgba(147, 112, 219, 0.6) !important;
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 6px rgba(147, 112, 219, 0.12), 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: 0 8px 20px rgba(147, 112, 219, 0.28);
 }

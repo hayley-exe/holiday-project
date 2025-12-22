@@ -1,9 +1,0 @@
-{
-  "startingGelt": { "player": 10, "pot": 10 },
-  "symbols": [
-    { "name": "Nun", "effect": "nothing" },
-    { "name": "Gimmel", "effect": "all" },
-    { "name": "Hey", "effect": "half" },
-    { "name": "Shin", "effect": "put" }
-  ]
-}
