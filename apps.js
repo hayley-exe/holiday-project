@@ -190,22 +190,15 @@ createApp({
                     }
                 };
 
+
                 const handleResult = (side) => {
-                    const outcomes = ['נ Nun — Nothing', 'ג Gimel — Take All!', 'ה Hey — Take Half', 'ש Shin — Put 2 In'];
+                    const outcomes = ['ה Hey — Take Half', 'נ Nun — Nothing', 'ש Shin — Put 2 In', 'ג Gimel — Take All!',];
                     resultText.value = `Landed on ${outcomes[side]}!`;
 
                     const player = players.value[currentPlayer.value];
                     let coinsMoved = 0;
 
-                    if (side === 1) { // Gimel
-                        coinsMoved = pot.value;
-                        player.gelt += pot.value;
-                        pot.value = 0;
-                    } else if (side === 2) { // Hey
-                        coinsMoved = Math.ceil(pot.value / 2);
-                        player.gelt += coinsMoved;
-                        pot.value -= coinsMoved;
-                    } else if (side === 3) { // Shin
+                    if (side === 1) { // Shin
                         if (player.gelt >= 2) {
                             player.gelt -= 2;
                             pot.value += 2;
@@ -215,6 +208,14 @@ createApp({
                             pot.value += 1;
                             coinsMoved = -1;
                         }
+                    } else if (side === 0) { // Hey
+                        coinsMoved = Math.ceil(pot.value / 2);
+                        player.gelt += coinsMoved;
+                        pot.value -= coinsMoved;
+                    } else if (side === 2) { // Gimel
+                        coinsMoved = pot.value;
+                        player.gelt += pot.value;
+                        pot.value = 0;
                     }
                     // Nun (0) = nothing
 
